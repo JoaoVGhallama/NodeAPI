@@ -22,17 +22,17 @@ jobs:
       - name: 📦 Instalar dependências
         run: npm install
 
-      - name: 🔍 Verificar se index.js existe
+      - name: 🔍 Verificar se src/index.js existe
         run: |
-          if [ ! -f index.js ]; then
-            echo "❌ index.js não encontrado!"
+          if [ ! -f src/index.js ]; then
+            echo "❌ src/index.js não encontrado!"
             ls -R
             exit 1
           fi
 
       - name: 🚀 Iniciar a API em segundo plano
         run: |
-          node index.js > output.log 2>&1 &
+          node src/index.js > output.log 2>&1 &
           echo $! > pid.txt
 
       - name: ⏳ Aguardar API iniciar
