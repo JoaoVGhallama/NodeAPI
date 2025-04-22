@@ -28,7 +28,6 @@ app.post("/usuarios", (req, res) => {
   res.status(201).json(novoUsuario);
 });
 
-// PUT - atualizar usuário
 app.put("/usuarios/:id", (req, res) => {
   const id = parseInt(req.params.id);
   const { nome } = req.body;
