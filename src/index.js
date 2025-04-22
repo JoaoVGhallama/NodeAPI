@@ -39,6 +39,12 @@ app.put("/usuarios/:id", (req, res) => {
   res.json(usuario);
 });
 
+app.delete("/usuarios/:id", (req, res) => {
+  const id = parseInt(req.params.id);
+  usuarios = usuarios.filter((u) => u.id !== id);
+  res.status(204).send();
+});
+
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);
 });
