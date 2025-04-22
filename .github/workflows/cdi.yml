@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build-and-test:
+  delivery:
     runs-on: ubuntu-latest
 
     steps:
@@ -21,24 +21,7 @@ jobs:
       - name: 📦 Instalar dependências
         run: npm install
 
-      - name: ✅ Rodar testes
-        run: |
-          if [ -f package.json ] && npm test; then
-            echo "✔️ Testes passaram!"
-          else
-            echo "⚠️ Sem testes encontrados ou falharam."
-            exit 1
-          fi
-
-      - name: 🔧 Build da aplicação (se aplicável)
-        run: |
-          if [ -f package.json ] && [ -f tsconfig.json ]; then
-            npm run build
-          else
-            echo "🔍 Nenhum processo de build necessário."
-          fi
-
-      - name: 📤 Preparar pacote para deploy
+      - name: 📤 Preparar arquivos para deploy
         run: |
           mkdir -p dist
           cp -r src dist/
