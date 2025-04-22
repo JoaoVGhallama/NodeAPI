@@ -21,6 +21,24 @@ app.get("/usuarios/:id", (req, res) => {
   res.json(usuario);
 });
 
+app.post("/usuarios", (req, res) => {
+  const { nome } = req.body;
+  const novoUsuario = { id: Date.now(), nome };
+  usuarios.push(novoUsuario);
+  res.status(201).json(novoUsuario);
+});
+
+// PUT - atualizar usuário
+app.put("/usuarios/:id", (req, res) => {
+  const id = parseInt(req.params.id);
+  const { nome } = req.body;
+  const usuario = usuarios.find((u) => u.id === id);
+  if (!usuario)
+    return res.status(404).json({ mensagem: "Usuário não encontrado" });
+  usuario.nome = nome;
+  res.json(usuario);
+});
+
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);
 });
