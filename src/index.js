@@ -43,7 +43,7 @@ app.delete("/usuarios/:id", (req, res) => {
   usuarios = usuarios.filter((u) => u.id !== id);
   res.status(204).send();
 });
-
+//haha
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);
 });
