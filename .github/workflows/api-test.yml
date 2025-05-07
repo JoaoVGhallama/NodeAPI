@@ -28,7 +28,7 @@ jobs:
           sleep 5
 
       - name: Executar testes
-        run: node ../../src/express/api.test.js
+        run: node api.test.js
 
       - name: Verificar status dos testes
         run: |
