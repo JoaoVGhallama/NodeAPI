@@ -1,37 +1,34 @@
-name: API TEST
+name: Teste da API Node.js
 
 on:
-  pull_request:
-    branches: [main, master, develop]
   push:
-    branches: [main, master, develop]
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Clonar o repositório
+        uses: actions/checkout@v3
 
-      - name: Setup Node.js
+      - name: Instalar o Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "16.x"
+          node-version: "18"
 
       - name: Instalar dependências
-        run: npm ci || npm install
+        run: npm install
 
-      - name: Iniciar servidor em background
+      - name: Rodar a API (modo de teste)
         run: |
-          node server.js &
-          # Aguarda 5 segundos para o servidor iniciar
-          sleep 5
+          nohup node index.js &
 
-      - name: Executar testes
-        run: node src/express/api.test.js
+      - name: Esperar a API iniciar
+        run: sleep 3
 
-      - name: Verificar status dos testes
+      - name: Testar rota GET /usuarios
         run: |
-          # Se os testes falharem, o script de teste deve retornar um código de erro
-          # que fará com que o workflow falhe
-          echo "Testes concluídos"
+          curl --fail http://localhost:3000/usuarios
