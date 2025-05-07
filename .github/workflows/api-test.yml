@@ -23,7 +23,7 @@ jobs:
 
       - name: Iniciar servidor em background
         run: |
-          node src/server.js &
+          node src/index.js &
           # Aguarda 5 segundos para o servidor iniciar
           sleep 5
 
