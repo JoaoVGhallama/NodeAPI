@@ -1,0 +1,76 @@
+name: Discord Notifications
+
+on:
+  push:
+    branches: [ main, master ]  # Ajuste conforme necessário
+  pull_request:
+    types: [ opened, reopened, synchronize ]
+
+jobs:
+  notify_discord:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Discord notification on commit
+        if: github.event_name == 'push'
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          GITHUB_USER: ${{ github.actor }}
+          GITHUB_REPO: ${{ github.repository }}
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+          COMMIT_URL: ${{ github.event.head_commit.url }}
+        run: |
+          curl -H "Content-Type: application/json" -d '{
+            "username": "GitHub Bot",
+            "avatar_url": "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png",
+            "embeds": [{
+              "title": "Novo commit em ${{ github.repository }}",
+              "description": "${{ github.event.head_commit.message }}",
+              "color": 5814783,
+              "fields": [
+                {
+                  "name": "Autor",
+                  "value": "${{ github.actor }}",
+                  "inline": true
+                },
+                {
+                  "name": "Repositório",
+                  "value": "${{ github.repository }}",
+                  "inline": true
+                }
+              ],
+              "url": "${{ github.event.head_commit.url }}"
+            }]
+          }' ${{ secrets.DISCORD_WEBHOOK }}
+
+      - name: Discord notification on PR
+        if: github.event_name == 'pull_request'
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        run: |
+          curl -H "Content-Type: application/json" -d '{
+            "username": "GitHub Bot",
+            "avatar_url": "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png",
+            "embeds": [{
+              "title": "Nova Pull Request em ${{ github.repository }}",
+              "description": "${{ github.event.pull_request.title }}",
+              "color": 7506394,
+              "fields": [
+                {
+                  "name": "Autor",
+                  "value": "${{ github.event.pull_request.user.login }}",
+                  "inline": true
+                },
+                {
+                  "name": "Status",
+                  "value": "${{ github.event.action }}",
+                  "inline": true
+                }
+              ],
+              "url": "${{ github.event.pull_request.html_url }}"
+            }]
+          }' ${{ secrets.DISCORD_WEBHOOK }}
