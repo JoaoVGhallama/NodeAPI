@@ -28,6 +28,8 @@ app.post("/usuarios", (req, res) => {
   res.status(201).json(novoUsuario);
 });
 
+//this edits
+
 app.put("/usuarios/:id", (req, res) => {
   const id = parseInt(req.params.id);
   const { nome } = req.body;
@@ -37,6 +39,8 @@ app.put("/usuarios/:id", (req, res) => {
   usuario.nome = nome;
   res.json(usuario);
 });
+
+// this deletes
 
 app.delete("/usuarios/:id", (req, res) => {
   const id = parseInt(req.params.id);
